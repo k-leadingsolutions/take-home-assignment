@@ -110,13 +110,16 @@ public class BettingServiceImpl implements BettingService {
             for (String string : strings) {
                 if (string.equals(strings.get(0))) {
                     sameSymbolsCount++;
+                }else{
+                    sameSymbolsCount=0;
                 }
                 if(sameSymbolsCount >= 3){
                     int finalSameSymbolsCount = sameSymbolsCount;
                     appliedWinningCombinations.put(string, winCombinations.stream()
                                     .filter(w -> w.getCount() != null)
                                     .filter(w ->  w.getCount().equals(finalSameSymbolsCount ))
-                            .map(WinCombination::getGroup).toList());
+                            .map(WinCombination::getGroup)
+                            .distinct().toList());
                 }
             }
         }
