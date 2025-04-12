@@ -78,6 +78,7 @@ public class BettingServiceImpl implements BettingService {
             String appliedBonusSymbol = matrix.stream()
                     .flatMap(List::stream)
                     .filter(bonusSymbols::contains)
+                    .sorted()
                     .findFirst()
                     .orElse(null);
 
