@@ -83,10 +83,11 @@ public class BettingServiceImpl implements BettingService {
                     .findFirst()
                     .orElse(null);
 
-            //set the reward if there's a bonus
-            output.setReward(getReward(reward, appliedBonusSymbol));
             // set applied winning combination
             output.setAppliedWinningCombinations(appliedWinningCombinations);
+
+            //set the reward if there's a bonus
+            output.setReward(getReward(reward, appliedBonusSymbol, !appliedWinningCombinations.isEmpty()));
 
             // set the applied bonus symbol
             output.setAppliedBonusSymbol(appliedBonusSymbol);
@@ -162,6 +163,9 @@ public class BettingServiceImpl implements BettingService {
             if (sameSymbolsCount >= winCombinationCount) {
                 reward = reward.add(BigDecimal.valueOf(winCombinationCount));
             }
+            else{
+                reward = BigDecimal.valueOf(0L);
+            }
         }
 
         return reward;
@@ -174,7 +178,7 @@ public class BettingServiceImpl implements BettingService {
      * @param appliedBonusSymbol
      * @return
      */
-    private static BigDecimal getReward(BigDecimal winReward, String appliedBonusSymbol) {
+    private static BigDecimal getReward(BigDecimal winReward, String appliedBonusSymbol, Boolean won) {
         BigDecimal reward;
         Map<String, Integer> bonusSymbolsMap = new HashMap<>();
         bonusSymbolsMap.put("10x", 10);
@@ -184,11 +188,14 @@ public class BettingServiceImpl implements BettingService {
         bonusSymbolsMap.put(null, 0);
 
         Integer bonusValue = bonusSymbolsMap.get(appliedBonusSymbol);
-
-        if (bonusValue < 100) {
-            reward = winReward.multiply(BigDecimal.valueOf(bonusValue));
-        } else {
-            reward = winReward.add(BigDecimal.valueOf(bonusValue));
+        if(won) {
+            if (bonusValue < 100) {
+                reward = winReward.multiply(BigDecimal.valueOf(bonusValue));
+            } else {
+                reward = winReward.add(BigDecimal.valueOf(bonusValue));
+            }
+        }else{
+            reward = BigDecimal.valueOf(0L);
         }
         return reward;
     }
