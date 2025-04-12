@@ -141,20 +141,27 @@ public class BettingServiceImpl implements BettingService {
                 if (symbol.equals(symbols.get(0))) {
                     sameSymbolsCount++;
                 }
+                else {
+                    sameSymbolsCount = 0;
+                }
             }
         }
 
         int finalSameSymbolsCount = sameSymbolsCount;
-        int winCombinationCount = winCombinations.stream()
-                .filter(w -> w.getCount() == finalSameSymbolsCount)
-                .map(WinCombination::getRewardMultiplier)
-                .mapToInt(BigDecimal::intValue)
-                .findFirst()
-                .orElse(0);
+        if(finalSameSymbolsCount != 0) {
+            int winCombinationCount = winCombinations.stream()
+                    .filter(w -> w.getCount() != null)
+                    .filter(w -> w.getCount() == finalSameSymbolsCount)
+                    .map(WinCombination::getRewardMultiplier)
+                    .mapToInt(BigDecimal::intValue)
+                    .findFirst()
+                    .orElse(0);
 
-        if (sameSymbolsCount >= winCombinationCount) {
-            reward = reward.add(BigDecimal.valueOf(winCombinationCount));
+            if (sameSymbolsCount >= winCombinationCount) {
+                reward = reward.add(BigDecimal.valueOf(winCombinationCount));
+            }
         }
+
         return reward;
     }
 
@@ -173,6 +180,7 @@ public class BettingServiceImpl implements BettingService {
         bonusSymbolsMap.put("+1000", 1000);
         bonusSymbolsMap.put("+500", 500);
         bonusSymbolsMap.put("MISS", 0);
+        bonusSymbolsMap.put(null, 0);
 
         Integer bonusValue = bonusSymbolsMap.get(appliedBonusSymbol);
 
