@@ -2,7 +2,7 @@
 take-home-assignment - maven project
 
 
-Note: Ensure project is run from project classpath
+Note: Ensure project is build and run from project classpath
 
 
 
