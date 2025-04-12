@@ -194,7 +194,7 @@ public class BettingServiceImpl implements BettingService {
      * @param matrix
      * @return
      */
-    private List<List<String>> generateMatrix(BettingGame bettingGame, Set<String> bonusSymbols, List<String> standardSymbols, Random random, List<List<String>> matrix) {
+    private static List<List<String>> generateMatrix(BettingGame bettingGame, Set<String> bonusSymbols, List<String> standardSymbols, Random random, List<List<String>> matrix) {
         int columns = bettingGame.getColumns().orElse(4);
         int rows = bettingGame.getRows().orElse(4);
 
