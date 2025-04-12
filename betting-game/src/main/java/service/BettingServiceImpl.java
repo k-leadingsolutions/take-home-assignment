@@ -78,6 +78,7 @@ public class BettingServiceImpl implements BettingService {
             String appliedBonusSymbol = matrix.stream()
                     .flatMap(List::stream)
                     .filter(bonusSymbols::contains)
+                    .filter(b -> !b.equals("MISS"))
                     .sorted()
                     .findFirst()
                     .orElse(null);
@@ -180,7 +181,6 @@ public class BettingServiceImpl implements BettingService {
         bonusSymbolsMap.put("5x", 5);
         bonusSymbolsMap.put("+1000", 1000);
         bonusSymbolsMap.put("+500", 500);
-        bonusSymbolsMap.put("MISS", 0);
         bonusSymbolsMap.put(null, 0);
 
         Integer bonusValue = bonusSymbolsMap.get(appliedBonusSymbol);
